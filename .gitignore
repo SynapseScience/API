@@ -130,5 +130,5 @@ dist
 .pnp.*
 
 .replit
-replix.nix
+replit.nix
 *lock*
