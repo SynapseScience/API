@@ -1,0 +1,29 @@
+{
+  "name": "Synapse-auth",
+  "version": "2.2.3",
+  "description": "Synapse's authentication server",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "build": "npx tsx index.ts",
+    "test": "npx tsx index.ts",
+    "start": "npx tsx index.ts"
+  },
+  "keywords": [],
+  "author": "paradoxe-tech",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.0.6",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.2",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
