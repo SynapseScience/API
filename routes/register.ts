@@ -3,7 +3,7 @@ import { rString } from "../functions/random";
 import bcrypt from "bcrypt";
 import User from "../models/User";
 
-export const run = (app) => {
+export const run = (app, CODES) => {
   
   app.post("/register", async (req: express.Request, res: express.Response) => {
     try {
@@ -25,10 +25,7 @@ export const run = (app) => {
       await newUser.save();
 
       const code = rString(20);
-      app.tokens[username] = {
-        code,
-        expire: Date.now() + 8.64e+7
-      };
+      CODES[username] = code;
 
       res.status(201).send({ code });
 
