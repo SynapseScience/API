@@ -1,7 +1,7 @@
 import express from "express";
-import { rString } from "../utils/random";
+import { rString } from "../functions/random";
 import bcrypt from "bcrypt";
-import User from "../utils/User";
+import User from "../models/User";
 
 export const run = (app) => {
   

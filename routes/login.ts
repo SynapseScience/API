@@ -1,9 +1,9 @@
 import express from "express";
-import { rString } from "../utils/random";
+import { rString } from "../functions/random";
 import bcrypt from "bcrypt";
-import User from "../utils/User";
+import User from "../models/User";
 
-export const run = (app: any) => {
+export const run = (app: any, CODES: { [key: string]: string }) => {
   
   app.post("/login", async (req: express.Request, res: express.Response) => {
     try {
@@ -21,11 +21,8 @@ export const run = (app: any) => {
       }
 
       const code = rString(20);
-      app.tokens[username] = {
-        code,
-        expire: Date.now() + 8.64e+7
-      };
-
+      CODES[username] = code;
+      
       res.status(200).send({ code });
 
     } catch(err) {

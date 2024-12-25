@@ -1,6 +1,6 @@
-import { newToken } from "../utils/token";
+import { newToken } from "../functions/token";
 
-export const run = (app) => {
+export const run = (app, CODES) => {
   
   app.get("/api/token", async (req, res) => {
     
@@ -11,20 +11,22 @@ export const run = (app) => {
       return res.status(400).send("No code or username provided");
     }
     
-    if (!app.tokens[username] || app.tokens[username].code !== code) {
+    if (!CODES[username] || CODES[username] !== code) {
       return res.status(401).send("Invalid exchange code");
     }
 
     let authenticator = req.headers.authorization;
     if (!authenticator) return res.status(400).send("No client credentials");
 
-    let signature = authenticator.replace("Basic ", "");
+    let appSignature = authenticator.replace("Basic ", "");
     
-    if (!signature || signature.length == 0) {
+    if (!appSignature || appSignature.length == 0) {
       return res.status(401).send("Invalid client credentials");
     }
 
-    res.json(newToken(code, signature));
+    res.json({
+      token: newToken(username, code, appSignature)
+    });
     
   });
   

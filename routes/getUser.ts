@@ -1,9 +1,10 @@
-import User from "../utils/User";
+import User from "../models/User";
 import express from "express";
+import authenticate from "../middleware/authenticate";
 
 export const run = (app): void => {
   
-  app.get("/api/user", async (req: express.Request, res: express.Response) => {
+  app.get("/api/user", authenticate(), async (req: express.Request, res: express.Response) => {
     try {
       const username = req.query.username as string;
 
