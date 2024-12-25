@@ -5,7 +5,7 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   fullname: { type: String, required: false },
   description: { type: String, default: "This user has no description" },
-  pronouns: { type: String, required: true },
+  pronouns: { type: String, required: false },
   avatar: { type: String, required: false },
   account: { type: Number, default: 100 },
   following: [{ type: String }],
@@ -19,6 +19,22 @@ const userSchema = new Schema({
     huggingface: { type: String, required: false }
   }
 });
+
+userSchema.statics.getPublicFields = function () {
+  const publicFields = [
+    "username",
+    "fullname",
+    "description",
+    "pronouns",
+    "avatar",
+    "following",
+    "followers",
+    "badges",
+    "connections"
+  ];
+
+  return publicFields.join(' ');
+}
 
 interface IUser extends Document {
   username: string;

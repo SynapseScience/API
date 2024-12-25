@@ -4,7 +4,7 @@ import authenticate from "../middleware/authenticate";
 
 export const run = (app): void => {
   
-  app.get("/api/user", authenticate(), async (req: express.Request, res: express.Response) => {
+  app.get("/api/user", authenticate(["everyone"]), async (req: express.Request, res: express.Response) => {
     try {
       const username = req.query.username as string;
 
@@ -12,7 +12,7 @@ export const run = (app): void => {
         return res.status(400).json({ message: "Username query parameter is required" });
       }
 
-      const user = await User.findOne({ username }).select("-password");
+      const user = await User.findOne({ username }).select(User.getPublicFields());
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
