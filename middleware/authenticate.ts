@@ -34,7 +34,9 @@ export default (requiredPermissions: string[] = []) => {
       });
 
       if (!hasPermissions) {
-        return res.status(403).json({ message: "Insufficient permissions" });
+        return res.status(403).json({ 
+          message: `Insufficient permissions. Needed : ${requiredPermissions}` 
+        });
       }
 
       req.clientId = clientId;
