@@ -7,7 +7,13 @@ export const run = (app, CODES) => {
   
   app.post("/register", async (req: express.Request, res: express.Response) => {
     try {
-      const { username, password, fullname, email } = req.body;
+      const { 
+        password,
+        username,
+        fullname,
+        email,
+        pronouns
+      } = req.body;
 
       const existingUser = await User.findOne({ username });
       if (existingUser) {
@@ -15,11 +21,13 @@ export const run = (app, CODES) => {
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
+
       const newUser = new User({
+        password: hashedPassword,
         username,
         fullname,
         email,
-        password: hashedPassword,
+        pronouns
       });
 
       await newUser.save();

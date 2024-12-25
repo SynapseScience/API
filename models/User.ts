@@ -5,6 +5,7 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   fullname: { type: String, required: false },
   description: { type: String, default: "This user has no description" },
+  email: { type: String, required: true, unique: true },
   pronouns: { type: String, required: false },
   avatar: { type: String, required: false },
   account: { type: Number, default: 100 },
