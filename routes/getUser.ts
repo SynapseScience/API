@@ -4,7 +4,7 @@ import authenticate from "../middleware/authenticate";
 
 export const run = (app): void => {
   
-  app.get("/api/user", authenticate(["everyone"]), async (req: express.Request, res: express.Response) => {
+  app.get("/api/user", async (req: express.Request, res: express.Response) => {
     try {
       const username = req.query.username as string;
 
