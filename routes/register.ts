@@ -3,7 +3,7 @@ import { rString } from "../functions/random";
 import bcrypt from "bcrypt";
 import User from "../models/User";
 
-export const run = (app, CODES) => {
+export const run = (app: any, CODES: { [key: string]: string }) => {
   
   app.post("/register", async (req: express.Request, res: express.Response) => {
     try {
