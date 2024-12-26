@@ -4,11 +4,13 @@ import authenticate from "../middleware/authenticate";
 
 export const run = (app): void => {
 
-  app.get("/api/follow", authenticate(["social"]), 
+  app.put("/api/follow", authenticate(["social"]), 
     async (req: express.Request, res: express.Response) => {
     try {
       const userA = await User.findOne({ username: req.username })
+        .select(User.getPublicFields())
       const userB = await User.findOne({ username: req.query.username })
+        .select(User.getPublicFields())
 
       if (!userA || !userB) {
         return res.status(404).json({ message: "User not found" });
@@ -26,7 +28,11 @@ export const run = (app): void => {
       await userA.save();
       await userB.save();
 
-      res.status(200).json({ message: "User successfully updated" })
+      res.status(200).json({ 
+        message: "User successfully updated", 
+        user: userA,
+        userB
+      })
 
     } catch (err) {
 
