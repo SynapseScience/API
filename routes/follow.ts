@@ -7,10 +7,10 @@ export const run = (app): void => {
   app.put("/api/follow", authenticate(["social"]), 
     async (req: express.Request, res: express.Response) => {
     try {
-      const userA = await User.findOne({ username: req.username })
-        .select(User.getPublicFields())
-      const userB = await User.findOne({ username: req.query.username })
-        .select(User.getPublicFields())
+      let userA = await User.findOne({ username: req.username });
+      userA = await userA.publicFields();
+      let userB = await User.findOne({ username: req.query.username });
+      userB = await userB.publicFields();
 
       if (!userA || !userB) {
         return res.status(404).json({ message: "User not found" });

@@ -8,20 +8,28 @@ export const run = (app, CODES) => {
     let username = req.query.username;
 
     if (!code || !username) {
-      return res.status(400).send("No code or username provided");
+      return res.status(400).send({
+        message: "No code or username provided"
+      });
     }
     
     if (!CODES[username] || CODES[username] !== code) {
-      return res.status(401).send("Invalid exchange code");
+      return res.status(401).send({
+        message: "Invalid exchange code"
+      });
     }
 
     let authenticator = req.headers.authorization;
-    if (!authenticator) return res.status(400).send("No client credentials");
+    if (!authenticator) return res.status(400).send({
+      message: "No client credentials"
+    });
 
     let appSignature = authenticator.replace("Basic ", "");
     
     if (!appSignature || appSignature.length == 0) {
-      return res.status(401).send("Invalid client credentials");
+      return res.status(401).send({
+        message: "Invalid client credentials"
+      });
     }
 
     res.json({
