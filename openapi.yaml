@@ -1,0 +1,399 @@
+openapi: 3.0.0
+info:
+  title: Synapse
+  version: 2.2.3
+  description: API documentation for my project
+servers:
+  - url: http://api.synapse.science
+paths:
+  /token:
+    get:
+      summary: Exchange a code for a token
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: "Your client application signature of shape app_id:app_secret" 
+          schema:
+            type: string
+            example: "Basic my_app:5w6ldnHszcUnIe48LHX"
+        - name: code
+          in: query
+          required: true
+          description: The exchange code provided by the login page callback
+          schema:
+            type: string
+            example: "DMhf7qJ2SkvSzQEycBw8"
+        - name: username
+          in: query
+          required: true
+          description: The desired user's Synapse username
+          schema:
+            type: string
+            example: "johndoe213"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    description: User session JSON Web Token
+                    type: string
+        400:
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                NoCodeOrUsername:
+                  summary: No code or username provided
+                  value:
+                    message: "No code or username provided"
+                NoClientCredentials:
+                  summary: No client credentials
+                  value:
+                    message: "No client credentials"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                InvalidCode:
+                  summary: Invalid exchange code
+                  value:
+                    message: "Invalid exchange code"
+                InvalidClient:
+                  summary: Invalid client credentials
+                  value:
+                    message: "Invalid client credentials"
+  /user:
+    get:
+      summary: Get user from username
+      parameters:
+        - name: username
+          in: query
+          required: true
+          description: The desired user's Synapse username
+          schema:
+            type: string
+            example: "johndoe213"
+      responses:
+        200: 
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: Bad request
+          content: 
+            application/json:
+              examples:
+                NoUsername:
+                  summary: No username query parameter
+                  value:
+                    message: Username query parameter is required
+        404:
+          description: User not found
+          content: 
+            application/json:
+              examples:
+                NoUsername:
+                  summary: User not found
+                  value:
+                    message: User not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              examples:
+                internalErrorExample:
+                  $ref: '#/components/examples/500'    
+    
+  /me:
+    get:
+      summary: Get authenticated user
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: "Your user access token from the OAuth2 authentication flow" 
+          schema:
+            type: string
+            example: "Bearer 5w6ldnHszcUnIe48LHX5w6ldnHszcUnIe48LHX"
+      responses:
+        200: 
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+          description: User not found
+        500:
+          description: Internal server error
+    put:
+      summary: Edit authenticated user
+      security:
+        - oauth2:
+            - edition
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: "Your user access token from the OAuth2 authentication flow" 
+          schema:
+            type: string
+            example: "Bearer 5w6ldnHszcUnIe48LHX5w6ldnHszcUnIe48LHX"
+      requestBody:
+        description: User data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullname:
+                  type: string
+                  description: Full or display name of the user
+                pronouns:
+                  type: string
+                  enum:
+                    - il
+                    - elle
+                    - iel
+                  description: User's genre pronoun
+                avatar:
+                  type: string
+                  format: uri
+                  description: URL to the user's avatar
+                  nullable: true
+                description:
+                  type: string
+                  description: User's biography or description
+                connections:
+                  type: object
+                  description: External accounts connected to the user profile
+                  properties:
+                    orcid:
+                      type: string
+                      description: ORCID identifier of the user
+                    bluesky:
+                      type: string
+                      description: Bluesky username of the user
+                    github:
+                      type: string
+                      description: GitHub username of the user
+                    gitlab:
+                      type: string
+                      description: GitLab username of the user
+                    hal:
+                      type: string
+                      description: HAL identifier of the user
+                    huggingface:
+                      type: string
+                      description: Hugging Face username of the user
+                    x:
+                      type: string
+                      description: X (formerly Twitter) username of the user
+                    instagram:
+                      type: string
+                      description: Instagram username of the user
+                    linkedin:
+                      type: string
+                      description: LinkedIn username of the user
+                    reddit:
+                      type: string
+                      description: Reddit username of the user
+                    discord:
+                      type: string
+                      description: Discord username and discriminator of the user
+                    wechat:
+                      type: string
+                      description: WeChat username of the user
+                    threads:
+                      type: string
+                      description: Threads username of the user
+                    mastodon:
+                      type: string
+                      description: Mastodon username of the user
+                    goodreads:
+                      type: string
+                      description: Goodreads username of the user
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Sucessfully updated user
+                  user:
+                    $ref: '#/components/schemas/User'
+        404:
+          description: User not found
+        500:
+          description: Internal server error
+  /follow:
+    put:
+      summary: Follow user
+      security:
+        - oauth2:
+            - social
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: "Your user access token from the OAuth2 authentication flow" 
+          schema:
+            type: string
+            example: "Bearer 5w6ldnHszcUnIe48LHX5w6ldnHszcUnIe48LHX"
+      responses:
+        200: 
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Sucessfully updated user
+                  user:
+                    $ref: '#/components/schemas/User'
+                  userB:
+                    $ref: '#/components/schemas/User'
+        404:
+          description: User not found
+        500:
+          description: Internal server error
+
+
+components:
+  examples:
+    500:
+      summary: Internal server error
+      value:
+        message: Internal server error
+  schemas:
+    User:
+      type: object
+      description: The updated user object
+      required:
+        - username
+        - description
+        - pronouns
+        - following
+        - followers
+        - badges
+        - creation
+        - starred
+      properties:
+        username:
+          type: string
+          description: Unique username of the user
+        fullname:
+          type: string
+          description: Full name of the user
+          nullable: true
+        avatar:
+          type: string
+          format: uri
+          description: URL to the user's avatar
+          nullable: true
+        description:
+          type: string
+          description: User's biography or description
+        pronouns:
+          type: string
+          description: User's pronouns
+          enum: ["il", "elle", "iel"]
+        following:
+          type: array
+          description: List of usernames the user is following
+          items:
+            type: string
+        followers:
+          type: array
+          description: List of usernames following the user
+          items:
+            type: string
+        badges:
+          type: array
+          description: List of badge identifiers owned by the user
+          items:
+            type: string
+        creation:
+          type: string
+          format: date-time
+          description: The date when the user account was created
+        starred:
+          type: array
+          description: List of client IDs of the projects liked by the user
+          items:
+            type: string
+        connections:
+          type: object
+          description: External accounts connected to the user profile
+          properties:
+            orcid:
+              type: string
+              description: ORCID identifier of the user
+            bluesky:
+              type: string
+              description: Bluesky username of the user
+            github:
+              type: string
+              description: GitHub username of the user
+            gitlab:
+              type: string
+              description: GitLab username of the user
+            hal:
+              type: string
+              description: HAL identifier of the user
+            huggingface:
+              type: string
+              description: Hugging Face username of the user
+            x:
+              type: string
+              description: X (formerly Twitter) username of the user
+            instagram:
+              type: string
+              description: Instagram username of the user
+            linkedin:
+              type: string
+              description: LinkedIn username of the user
+            reddit:
+              type: string
+              description: Reddit username of the user
+            discord:
+              type: string
+              description: Discord username and discriminator of the user
+            wechat:
+              type: string
+              description: WeChat username of the user
+            threads:
+              type: string
+              description: Threads username of the user
+            mastodon:
+              type: string
+              description: Mastodon username of the user
+            goodreads:
+              type: string
+              description: Goodreads username of the user
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorization code grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://synapse.science/login
+          tokenUrl:  https://api.synapse.science/token
+          scopes:
+            edition: Edit authenticated Synapse user's public informations
+            social: Follow people, star projects and interact
