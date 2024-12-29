@@ -132,3 +132,5 @@ dist
 .replit
 replit.nix
 *lock*
+auth/*
+assets/*
