@@ -1,0 +1,31 @@
+theme:
+  colors:
+    primary:
+      main: "#000000"
+    success:
+      main: "#28a745"
+    text:
+      primary: "#212121"
+      secondary: "#757575"
+  menu:
+    backgroundColor: "#000000"
+    textColor: "#9e9e9e"
+    fontSize: "13px"
+    groupItems:
+      textTransform: capitalize
+    activeTextColor: "#9e9e9e"
+    inactiveTextColor: "#9e9e9e"
+  logo:
+    url: "https://c922b0b4-faa7-4843-a36a-5d117f94fbe2-00-2rvq4synzbykl.janeway.replit.dev/assets/logo.png"
+    backgroundColor: "#000000"
+    altText: "API Logo"
+    href: "https://example.com"
+  spacing:
+    unit: 8
+  rightPanel:
+    backgroundColor: "#000000"
+    textColor: "#f8f8f2"
+  codeBlock:
+    backgroundColor: "#151515"
+    textColor: "#f8f8f2"
+    theme: "tomorrow-night"

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>API Documentation</title>
+  <script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml/dist/js-yaml.min.js"></script>
+</head>
+<body>
+  <div id="redoc-container"></div>
+  <script>
+    fetch('redoc.yaml')
+      .then(response => response.text())
+      .then(yamlText => {
+        const options = jsyaml.load(yamlText);
+
+        Redoc.init(
+          'openapi.yaml', 
+          options, 
+          document.getElementById('redoc-container'));
+      });
+  </script>
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+    }
+  </style>
+</body>
+</html>

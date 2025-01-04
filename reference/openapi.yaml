@@ -2,13 +2,13 @@ openapi: 3.0.0
 info:
   title: Synapse
   version: 2.2.3
-  description: API documentation for my project
+  description: Synapse is a REST API designed to simplify and promote innovation in the realm of independent science. It leverages the standard authentication flow, making it easy to use without requiring advanced technical skills. It is designed for scientists, researchers, and especially enthusiasts who wish to launch projects without being constrained by closed platforms or limited ecosystems. We promote a participatory approach where projects are open, free, transparent, and accessible. Finally, Synapse aims to provide significant visibility to independent projects, helping them connect with the right audience or contributors.
 servers:
-  - url: http://api.synapse.science
+  - url: https://synapse-api.replit.app/
 paths:
   /token:
     get:
-      summary: Exchange a code for a token
+      summary: Get your OAuth2 token
       parameters:
         - name: Authorization
           in: header
@@ -115,6 +115,8 @@ paths:
   /me:
     get:
       summary: Get authenticated user
+      security:
+        - oauth2:
       parameters:
         - name: Authorization
           in: header
@@ -392,8 +394,8 @@ components:
       description: This API uses OAuth 2 with the authorization code grant flow.
       flows:
         authorizationCode:
-          authorizationUrl: https://synapse.science/login
-          tokenUrl:  https://api.synapse.science/token
+          authorizationUrl: https://synapse-api.replit.app/login
+          tokenUrl: https://synapse-api.replit.app/api/token
           scopes:
             edition: Edit authenticated Synapse user's public informations
             social: Follow people, star projects and interact
