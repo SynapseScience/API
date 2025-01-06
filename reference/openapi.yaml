@@ -4,7 +4,7 @@ info:
   version: 2.2.3
   description: Synapse is a REST API designed to simplify and promote innovation in the realm of independent science. It leverages the standard authentication flow, making it easy to use without requiring advanced technical skills. It is designed for scientists, researchers, and especially enthusiasts who wish to launch projects without being constrained by closed platforms or limited ecosystems. We promote a participatory approach where projects are open, free, transparent, and accessible. Finally, Synapse aims to provide significant visibility to independent projects, helping them connect with the right audience or contributors.
 servers:
-  - url: https://synapse-api.replit.app/
+  - url: https://synapse-api.replit.app/api/
 paths:
   /token:
     get:
@@ -243,7 +243,7 @@ paths:
           description: Internal server error
   /follow:
     put:
-      summary: Follow user
+      summary: Follow / Unfollow user
       security:
         - oauth2:
             - social
