@@ -4,8 +4,8 @@ import Application from "../models/Application";
 export const run = (app, CODES: { [key: string]: string }) => {
   
   app.get("/api/token", async (req, res) => {
-    
-    let code = req.body.code;
+
+    let code = req.query.code;
     
     if (!code || !CODES[code]) {
       return res.status(401).send({
