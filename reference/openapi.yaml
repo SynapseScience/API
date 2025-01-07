@@ -24,13 +24,6 @@ paths:
           schema:
             type: string
             example: "DMhf7qJ2SkvSzQEycBw8"
-        - name: username
-          in: query
-          required: true
-          description: The desired user's Synapse username
-          schema:
-            type: string
-            example: "johndoe213"
       responses:
         200:
           description: Success
@@ -44,30 +37,8 @@ paths:
                     type: string
         400:
           description: Bad request
-          content:
-            application/json:
-              examples:
-                NoCodeOrUsername:
-                  summary: No code or username provided
-                  value:
-                    message: "No code or username provided"
-                NoClientCredentials:
-                  summary: No client credentials
-                  value:
-                    message: "No client credentials"
         401:
           description: Unauthorized
-          content:
-            application/json:
-              examples:
-                InvalidCode:
-                  summary: Invalid exchange code
-                  value:
-                    message: "Invalid exchange code"
-                InvalidClient:
-                  summary: Invalid client credentials
-                  value:
-                    message: "Invalid client credentials"
   /user:
     get:
       summary: Get user from username
@@ -88,30 +59,10 @@ paths:
                 $ref: '#/components/schemas/User'
         400:
           description: Bad request
-          content: 
-            application/json:
-              examples:
-                NoUsername:
-                  summary: No username query parameter
-                  value:
-                    message: Username query parameter is required
         404:
           description: User not found
-          content: 
-            application/json:
-              examples:
-                NoUsername:
-                  summary: User not found
-                  value:
-                    message: User not found
         500:
           description: Internal server error
-          content:
-            application/json:
-              examples:
-                internalErrorExample:
-                  $ref: '#/components/examples/500'    
-    
   /me:
     get:
       summary: Get authenticated user
@@ -275,13 +226,7 @@ paths:
         500:
           description: Internal server error
 
-
 components:
-  examples:
-    500:
-      summary: Internal server error
-      value:
-        message: Internal server error
   schemas:
     User:
       type: object
@@ -399,3 +344,4 @@ components:
           scopes:
             edition: Edit authenticated Synapse user's public informations
             social: Follow people, star projects and interact
+            economy: Manage SYN token, create tradable value
