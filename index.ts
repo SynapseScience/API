@@ -19,7 +19,7 @@ app.use(express.json())
 
 app.use("/", express.static("reference"));
 app.use("/assets", express.static("assets"));
-app.use("/auth", express.static("auth"));
+app.use("/oauth", express.static("oauth"));
 app.use("/dist", express.static("dist"));
 
 let CODES = {};
