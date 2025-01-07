@@ -21,7 +21,7 @@ export const run = (app: any, CODES: { [key: string]: string }) => {
       }
 
       const code = rString(20);
-      CODES[username] = code;
+      CODES[code] = username;
       
       res.status(200).send({ code });
 

@@ -1,9 +1,8 @@
 import express from "express";
-import { rString } from "../functions/random";
 import bcrypt from "bcrypt";
 import User from "../models/User";
 
-export const run = (app: any, CODES: { [key: string]: string }) => {
+export const run = (app: any) => {
   
   app.post("/register", async (req: express.Request, res: express.Response) => {
     try {
@@ -32,10 +31,7 @@ export const run = (app: any, CODES: { [key: string]: string }) => {
 
       await newUser.save();
 
-      const code = rString(20);
-      CODES[username] = code;
-
-      res.status(201).send({ code });
+      res.status(201).send({ message: "User succesfully created" });
 
     } catch (err) {
 
