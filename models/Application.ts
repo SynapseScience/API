@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 const applicationSchema = new Schema({
   client_id: { type: String, required: true, unique: true },
+  client_secret: { type: String, required: false },
   title: { type: String, required: true },
   creation: { type: Date, default: Date.now },
   permissions: [{ type: String }],
@@ -21,6 +22,7 @@ const applicationSchema = new Schema({
 
 interface IApplication extends Document {
   client_id: string;
+  client_secret: string;
   title: string;
   creation: Date;
   permissions: string[];

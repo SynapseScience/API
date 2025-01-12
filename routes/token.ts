@@ -1,5 +1,6 @@
 import { newToken } from "../functions/token";
 import Application from "../models/Application";
+import bcrypt from "bcrypt";
 
 export const run = (app, CODES: { [key: string]: string }) => {
   
@@ -29,11 +30,20 @@ export const run = (app, CODES: { [key: string]: string }) => {
     }
 
     const clientId = appSignature.split(':')[0];
-    const client = Application.findOne({ client_id: clientId });
+    const client = await Application.findOne({ client_id: clientId });
 
     if(!clientId || !client) {
       return res.status(401).send({
-        message: "Invalid client credentials"
+        message: "Invalid client id"
+      });
+    }
+
+    const clientSecret = appSignature.split(':')[1];
+    const isMatch = await bcrypt.compare(clientSecret, client.client_secret);
+    
+    if(!clientSecret || !isMatch) {
+      return res.status(401).send({
+        message: "Invalid client secret"
       });
     }
 
