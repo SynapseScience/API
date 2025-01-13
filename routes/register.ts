@@ -1,10 +1,11 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import User from "../models/User";
+import cors from "../middleware/cors";
 
 export const run = (app: any) => {
   
-  app.post("/register", async (req: express.Request, res: express.Response) => {
+  app.post("/register", cors(), async (req: express.Request, res: express.Response) => {
     try {
       const { 
         password,
