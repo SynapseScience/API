@@ -206,6 +206,13 @@ paths:
           schema:
             type: string
             example: "Bearer 5w6ldnHszcUnIe48LHX5w6ldnHszcUnIe48LHX"
+        - name: username
+          in: query
+          required: true
+          description: "The username of the user you want to folow" 
+          schema:
+            type: string
+            example: "johndoe123"
       responses:
         200: 
           description: Success
@@ -216,11 +223,51 @@ paths:
                 properties:
                   message:
                     type: string
-                    description: Sucessfully updated user
+                    description: Sucessfully updated users
                   user:
                     $ref: '#/components/schemas/User'
                   userB:
                     $ref: '#/components/schemas/User'
+        404:
+          description: User not found
+        500:
+          description: Internal server error
+  /like:
+    put:
+      summary: Like / Unlike application
+      security:
+        - oauth2:
+            - social
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: "Your user access token from the OAuth2 authentication flow" 
+          schema:
+            type: string
+            example: "Bearer 5w6ldnHszcUnIe48LHX5w6ldnHszcUnIe48LHX"
+        - name: client_id
+          in: query
+          required: true
+          description: "The client id of the application you want to like" 
+          schema:
+            type: string
+            example: "myapplication42"
+      responses:
+        200: 
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Sucessfully updated user and application
+                  user:
+                    $ref: '#/components/schemas/User'
+                  application:
+                    $ref: '#/components/schemas/Application'
         404:
           description: User not found
         500:
@@ -332,7 +379,41 @@ components:
               description: Mastodon username of the user
             goodreads:
               type: string
-              description: Goodreads username of the user
+              description: Goodreads username of the user     
+    Application:
+      type: object
+      description: The updated application object
+      required:
+        - client_id
+        - title
+        - description
+        - stargazers
+        - permissions
+        - creation
+      properties:
+        client_id:
+          type: string
+          description: Unique identifyer of the application
+        title:
+          type: string
+          description: Title of the application
+        description:
+          type: string
+          description: Description of the application
+        stargazers:
+          type: array
+          description: List of usernames that starred this application
+          items:
+            type: string
+        creation:
+          type: string
+          format: date-time
+          description: The date when the application was registered
+        permissions:
+          type: array
+          description: List of the application's permissions
+          items:
+            type: string
   securitySchemes:
     oauth2:
       type: oauth2

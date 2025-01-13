@@ -20,6 +20,10 @@ const applicationSchema = new Schema({
   }
 });
 
+applicationSchema.methods.publicFields = function() {
+  return this.model('Client').findOne({ _id: this._id }).select('-client_secret');
+};
+
 interface IApplication extends Document {
   client_id: string;
   client_secret: string;
