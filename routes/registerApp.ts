@@ -6,7 +6,7 @@ import { rString } from "../functions/random";
 
 export const run = (app: any) => {
 
-  app.post("/api/applications", authenticate(["manage_apps"]), 
+  app.post("/api/application", authenticate(["manage_apps"]), 
     async (req: express.Request, res: express.Response) => {
     try {
       const { 
