@@ -269,10 +269,65 @@ paths:
                   application:
                     $ref: '#/components/schemas/Application'
         404:
-          description: User not found
+          description: Application not found
         500:
           description: Internal server error
-
+  /applications:
+    get:
+      summary: Get applications list
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          default: 10
+          description: "The number of applications to be returned [1 ; 50]" 
+          schema:
+            type: integer
+            example: 25
+        - name: offset
+          in: query
+          required: false
+          default: 0
+          description: "The pagination offset" 
+          schema:
+            type: integer
+            example: 3
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  applications:
+                    description: "List of applications"
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Application'
+                  pagination:
+                    type: object
+                    description: "Informations about pagination"
+                    properties:
+                      total:
+                        type: integer
+                        description: "The total amount of Synapse applications"
+                      limit:
+                        type: integer
+                        description: "The limit that was used for this request"
+                      offset:
+                        type: integer
+                        description: "The offset that was used for this request"
+                      currentPage:
+                        type: integer
+                        description: "The page that was returned"
+                      totalPages:
+                        type: integer
+                        description: "The total amount of pages"
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
 components:
   schemas:
     User:
