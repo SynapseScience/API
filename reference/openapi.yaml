@@ -328,6 +328,30 @@ paths:
           description: Bad request
         500:
           description: Internal server error
+  /application:
+    get:
+      summary: Get application from id
+      parameters:
+        - name: client_id
+          in: query
+          required: true
+          description: The desired Synapse application's identifyer
+          schema:
+            type: string
+            example: "myapp123"
+      responses:
+        200: 
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        400:
+          description: Bad request
+        404:
+          description: Application not found
+        500:
+          description: Internal server error
 components:
   schemas:
     User:
