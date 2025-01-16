@@ -30,7 +30,8 @@ const userSchema = new Schema({
     goodreads: { type: String, required: false },
   },
   creation: { type: Date, default: Date.now },
-  starred: [{ type: String }]
+  starred: [{ type: String }],
+  applications: { type: [String], default: [] }
 });
 
 userSchema.methods.publicFields = function() {
@@ -66,6 +67,7 @@ interface IUser extends Document {
     mastodon?: string;
     goodreads?: string;
   };
+  applications: string[];
 }
 
 const User = mongoose.model<IUser>("User", userSchema);

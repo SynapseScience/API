@@ -1,23 +1,34 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+function isValidUrl(v: string) {
+  return /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/.test(v);
+}
+
 const applicationSchema = new Schema({
   client_id: { type: String, required: true, unique: true },
   client_secret: { type: String, required: false },
   title: { type: String, required: true },
   creation: { type: Date, default: Date.now },
-  permissions: [{ type: String }],
+  permissions: { type: [String], default: [], required: true },
   stargazers: [{ type: String }],
-  description: { type: String, default: "This app has no description" },
+  description: { type: String, required: true },
+  type: { type: String, enum: [
+    "outil", "jeu", "forum", "données", "plateforme"
+  ], required: true },
+  tags: { type: [String], enum: [
+    "participatif", "open-source", "accessible"
+  ], default: [] },
+  authors: { type: [String], default: [] },
+  uris: { type: [String], default: [], required: true },
   link: {
     type: String,
     required: false,
     validate: {
-      validator: function (v: string) {
-        return /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/.test(v);
-      },
-      message: (props) => `${props.value} is not a valid URL!`,
+      validator: isValidUrl,
+      message: (props:{ value: string }) => `${props.value} is not a valid URL!`,
     },
-  }
+  },
+  verified: { type: Boolean, default: false }
 });
 
 applicationSchema.methods.publicFields = function() {
@@ -32,6 +43,10 @@ interface IApplication extends Document {
   permissions: string[];
   stargazers: string[];
   description: string;
+  type: string;
+  tags: string[];
+  authors: string[];
+  uris: string[];
   link: string;
 }
 
