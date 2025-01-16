@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import Application from "../models/Application";
+import User from "../models/User";
 
 export default (requiredPermissions: string[] = []) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -41,6 +42,11 @@ export default (requiredPermissions: string[] = []) => {
 
       req.clientId = clientId;
       req.username = decoded.username;
+
+      const user = await User.findOne({ username: decoded.username })
+      if(!user) return res.status(404).json({ 
+        message: `This user does not exist` 
+      });
 
       next();
       
