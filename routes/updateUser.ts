@@ -16,8 +16,6 @@ export const run = (app: any) => {
         avatar
       } = req.body;
 
-      console.log(req.body)
-
       const user = await User.findOne({ username: req.username })
         .select(User.getPublicFields());
 
