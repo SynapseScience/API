@@ -292,6 +292,22 @@ paths:
           schema:
             type: integer
             example: 3
+        - name: author
+          in: query
+          required: false
+          default: 0
+          description: "One of the application author" 
+          schema:
+            type: string
+            example: "johndoe123"
+        - name: search
+          in: query
+          required: false
+          default: 0
+          description: "A term contained in the application title" 
+          schema:
+            type: string
+            example: "application"
       responses:
         200:
           description: Success
