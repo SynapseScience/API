@@ -9,43 +9,25 @@ export const run = (app: any): void => {
       const limit = parseInt(req.query.limit as string, 10) || 10;
       const offset = parseInt(req.query.offset as string, 10) || 0;
 
-      if(limit <= 0 || limit > 50 || offset < 0) {
+      if (limit <= 0 || limit > 50 || offset < 0) {
         return res.status(400).json({ 
           message: "Invalid limit or offset values" 
         });
       }
 
       const query: Record<string, any> = {};
-      query.verified = true;
 
-      if(req.query.author) {
-        const author = await User.findOne({ username: req.query.author }).lean();
-        if (!author) {
+      if (req.query.author) {
+        const user = await User.findOne({ username: req.query.author }).lean();
+        if (!user) {
           return res.status(404).json({ 
-            message: "Author not found" 
+            message: "User not found" 
           });
         }
-        
         query.authors = req.query.author;
-
-        if(req.query.private == "true") {
-          
-          if(!req.username) return res.status(401).json({ 
-            message: "Not authorized"
-          });
-          
-          const user = await User.findOne({ username: req.username }).lean();
-          if(user.username !== author.username) {
-
-            delete query.verified;
-            
-          } else return res.status(403).json({ 
-            message: "You are not the author"
-          });
-        }
       }
 
-      if(req.query.search) {
+      if (req.query.search) {
         query.title = { $regex: req.query.search, $options: "i" };
       }
 
