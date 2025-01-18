@@ -16,6 +16,7 @@ export const run = (app: any): void => {
       }
 
       const query: Record<string, any> = {};
+      query.verified = true;
 
       if (req.query.author) {
         const user = await User.findOne({ username: req.query.author }).lean();
