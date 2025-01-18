@@ -2,8 +2,9 @@ import express from "express";
 import bcrypt from "bcrypt";
 import User from "../models/User";
 import cors from "../middleware/cors";
+import { rString } from "../functions/random";
 
-export const run = (app: any) => {
+export const run = (app: any, CODES: { [key: string]: string }) => {
   
   app.post("/register", cors(), async (req: express.Request, res: express.Response) => {
     try {
@@ -32,7 +33,10 @@ export const run = (app: any) => {
 
       await newUser.save();
 
-      res.status(201).send({ message: "User succesfully created" });
+      const code = rString(20);
+      CODES[code] = username;
+
+      res.status(201).send({ message: "User succesfully created", code });
 
     } catch (err) {
 
