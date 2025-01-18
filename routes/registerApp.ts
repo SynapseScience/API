@@ -31,8 +31,6 @@ export const run = (app: any) => {
         uris
       } = req.body;
 
-      console.log(req.body)
-
       if(!uris || uris.length > 5 || uris.length < 1) {
         return res.status(400).json({ 
           message: "Number of URIs should be in [1-5]" 
