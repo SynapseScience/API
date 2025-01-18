@@ -7,7 +7,7 @@ const userSchema = new Schema({
   description: { type: String, default: "This user has no description" },
   email: { type: String, required: true, unique: true },
   pronouns: { type: String, enum: ["il", "elle", "iel"], required: true },
-  avatar: { type: String, required: true, default: "" },
+  avatar: { type: String, default: "" },
   account: { type: Number, default: 0 },
   following: [{ type: String }],
   followers: [{ type: String }],
