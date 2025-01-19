@@ -1,34 +1,79 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 const userSchema = new Schema({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  fullname: { type: String, required: false },
-  description: { type: String, default: "This user has no description" },
-  email: { type: String, required: true, unique: true },
+  username: { 
+    type: String, 
+    required: true, 
+    unique: true,
+    match: [
+      /^[a-z0-9._-]+$/,
+      "Username can only contain letters, numbers and any of .-_"], 
+    minlength: [3, "Username must be at least 3 characters long"], 
+    maxlength: [25, "Username must not exceed 25 characters"]
+  },
+  password: { 
+    type: String, 
+    required: true, 
+    minlength: [8, "Password must be at least 8 characters long"] 
+  },
+  fullname: { 
+    type: String,
+    required: true,
+    maxlength: [40, "Fullname must be less than 40 characters long"] 
+  },
+  description: { 
+    type: String, 
+    default: "", 
+    maxlength: [200, "Description must be less than 200 characters long"] 
+  },
+  email: { 
+    type: String, 
+    required: true, 
+    unique: true, 
+    match: [/^\S+@\S+\.\S+$/, "Please enter a valid email address"] 
+  },
   pronouns: { type: String, enum: ["il", "elle", "iel"], required: true },
-  avatar: { type: String, default: "" },
+  avatar: {
+    type: String, 
+    default: "", 
+    match: [
+      /^(?:|https?:\/\/(?:[\w\-]+\.)+[a-z]{2,6}(?:\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)*\.(?:png|jpe?g))$/i, 
+      "Avatar must be empty or a valid URL pointing to a .png or .jpeg image"
+    ]
+  },
   account: { type: Number, default: 0 },
   following: [{ type: String }],
   followers: [{ type: String }],
   badges: [{ type: String }],
-  connections: {
-    orcid: { type: String, required: false },
-    bluesky: { type: String, required: false },
-    github: { type: String, required: false },
-    gitlab: { type: String, required: false },
-    hal: { type: String, required: false },
-    huggingface: { type: String, required: false },
-    x: { type: String, required: false },
-    instagram: { type: String, required: false },
-    linkedin: { type: String, required: false },
-    reddit: { type: String, required: false },
-    discord: { type: String, required: false },
-    wechat: { type: String, required: false },
-    threads: { type: String, required: false },
-    mastodon: { type: String, required: false },
-    goodreads: { type: String, required: false },
-  },
+  connections: [
+    {
+      platform: {
+        type: String,
+        enum: [
+          "orcid", 
+          "bluesky", 
+          "github", 
+          "gitlab", 
+          "hal", 
+          "huggingface", 
+          "x", 
+          "instagram", 
+          "linkedin", 
+          "reddit", 
+          "discord", 
+          "wechat", 
+          "threads", 
+          "mastodon", 
+          "goodreads"
+        ],
+        required: true,
+      },
+      username: { 
+        type: String, 
+        required: true 
+      }
+    }
+  ],
   creation: { type: Date, default: Date.now },
   starred: [{ type: String }],
   applications: { type: [String], default: [] }
@@ -41,8 +86,8 @@ userSchema.methods.publicFields = function() {
 interface IUser extends Document {
   username: string;
   password: string;
-  fullname?: string;
-  avatar?: string;
+  fullname: string;
+  avatar: string;
   description: string;
   pronouns: "il" | "elle" | "iel";
   account: number;
@@ -51,22 +96,10 @@ interface IUser extends Document {
   badges: string[];
   creation: Date;
   starred: string[];
-  connections: {
-    orcid?: string;
-    bluesky?: string;
-    github?: string;
-    hal?: string;
-    huggingface?: string;
-    x?: string;
-    instagram?: string;
-    linkedin?: string;
-    reddit?: string;
-    discord?: string;
-    wechat?: string;
-    threads?: string;
-    mastodon?: string;
-    goodreads?: string;
-  };
+  connections: Array<{
+    platform: string;
+    username: string;
+  }>;
   applications: string[];
 }
 

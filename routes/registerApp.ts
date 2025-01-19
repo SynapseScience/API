@@ -71,6 +71,11 @@ export const run = (app: any) => {
 
     } catch (err) {
 
+      if (err.name === "ValidationError") {
+        const errors = Object.values(err.errors).map((e: any) => e.message);
+        return res.status(400).json({ errors });
+      }
+
       console.error(err);
       return res.status(500).json({ 
         message: "Internal server error" 
