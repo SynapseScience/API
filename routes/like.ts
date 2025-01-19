@@ -45,7 +45,10 @@ export const run = (app): void => {
 
       if (err.name === "ValidationError") {
         const errors = Object.values(err.errors).map((e: any) => e.message);
-        return res.status(400).json({ errors });
+        return res.status(400).json({ 
+          message: "Validation error on user-defined fields",
+          errors 
+        });
       }
 
       console.error(err);
