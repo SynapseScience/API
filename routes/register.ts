@@ -25,7 +25,7 @@ export const run = (app: any, CODES: { [key: string]: string }) => {
 
       const newUser = new User({
         password: hashedPassword,
-        username,
+        username: username.toLowerCase(),
         fullname,
         email,
         pronouns

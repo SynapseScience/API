@@ -49,7 +49,7 @@ export const run = (app: any) => {
 
       const newApp = new Application({
         client_secret: hashedSecret,
-        client_id,
+        client_id: client_id.toLowerCase(),
         title,
         description,
         link,
