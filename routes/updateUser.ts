@@ -4,7 +4,7 @@ import authenticate from "../middleware/authenticate";
 
 export const run = (app: any) => {
   
-  app.put("/api/user", authenticate(["edition"]), 
+  app.put("/api/me", authenticate(["edition"]), 
     async (req: express.Request, res: express.Response) => {
       
     try {
