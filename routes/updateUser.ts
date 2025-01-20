@@ -16,8 +16,7 @@ export const run = (app: any) => {
         avatar
       } = req.body;
 
-      const user = await User.findOne({ username: req.username })
-        .select(User.getPublicFields());
+      let user = await User.findOne({ username: req.username });
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
@@ -30,6 +29,7 @@ export const run = (app: any) => {
       if (avatar) user.avatar = avatar;
 
       await user.save();
+      user = await user.publicFields();
 
       return res.status(200).json({ 
         message: "User updated successfully", 
