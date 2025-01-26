@@ -16,7 +16,10 @@ const applicationSchema = new Schema({
     "outil", "jeu", "forum", "données", "plateforme"
   ], required: true },
   tags: { type: [String], enum: [
-    "participatif", "open-source", "accessible"
+    "participatif", "open-source", "accessible", "éducatif",
+    "francophone", "anglophone",
+    "indépendant", "académique", "start-up", "entreprise",
+    "partenaire"
   ], default: [] },
   authors: { type: [String], default: [] },
   uris: { type: [String], default: [], required: true },
