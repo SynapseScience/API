@@ -32,6 +32,12 @@ export const run = (app: any): void => {
         query.title = { $regex: req.query.search, $options: "i" };
       }
 
+      if (req.query.tags) {
+        let tags = req.query.tags.split(",");
+        
+        query.tags = { $all: tags };
+      }
+
       const applications = await Application.find(query)
         .skip(offset)
         .limit(limit)
