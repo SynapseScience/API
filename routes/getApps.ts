@@ -19,12 +19,6 @@ export const run = (app: any): void => {
       query.verified = true;
 
       if (req.query.author) {
-        const user = await User.findOne({ username: req.query.author }).lean();
-        if (!user) {
-          return res.status(404).json({ 
-            message: "User not found" 
-          });
-        }
         query.authors = req.query.author;
       }
 
