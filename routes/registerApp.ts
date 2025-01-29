@@ -5,8 +5,6 @@ import authenticate from "../middleware/authenticate";
 import { rString } from "../functions/random";
 import User from "../models/User";
 
-const MAX_APPS = 3;
-
 export const run = (app: any) => {
 
   app.post("/api/application", authenticate(["manage_apps"]), 
@@ -14,12 +12,6 @@ export const run = (app: any) => {
     try {
 
       const user = await User.findOne({ username: req.username })
-
-      if(user.applications.length >= MAX_APPS) {
-        return res.status(403).json({ 
-          message: `This user already registered ${MAX_APPS} (max) Applications`
-        });
-      }
       
       const { 
         client_id,
@@ -72,7 +64,8 @@ export const run = (app: any) => {
     } catch (err) {
 
       if (err.name === "ValidationError") {
-        const errors = Object.values(err.errors).map((e: any) => e.message);
+        const errors = Object.values(err.errors)
+          .map((e: any) => e.message);
         return res.status(400).json({ 
           message: "Validation error on user-defined fields",
           errors 
