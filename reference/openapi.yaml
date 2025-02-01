@@ -306,6 +306,15 @@ paths:
           schema:
             type: string
             example: "application"
+        - name: sort
+          in: query
+          required: false
+          description: "A sort algorithm to be applied on the results"
+          default: "newest"
+          schema:
+            type: string
+            enum: ["popular", "reverse-popular", "newest", "oldest"]
+            example: "popular"
         - name: tags
           in: query
           required: false

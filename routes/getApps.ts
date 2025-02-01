@@ -1,9 +1,13 @@
 import Application from "../models/Application";
-import User from "../models/User";
 import express from "express";
 
+type IApp = {
+  stargazers: string[];
+}
+
 export const run = (app: any): void => {
-  app.get("/api/applications", async (req: express.Request, res: express.Response) => {
+  app.get("/api/applications", 
+    async (req: express.Request, res: express.Response) => {
     try {
       
       const limit = parseInt(req.query.limit as string, 10) || 10;
@@ -23,20 +27,36 @@ export const run = (app: any): void => {
       }
 
       if (req.query.search) {
-        query.title = { $regex: req.query.search, $options: "i" };
+        query.title = { 
+          $regex: req.query.search, 
+          $options: "i" 
+        };
       }
 
       if (req.query.tags) {
-        let tags = req.query.tags.split(",");
-        
+        let tags = (req.query.tags as string).split(",");
         query.tags = { $all: tags };
       }
 
-      const applications = await Application.find(query)
-        .skip(offset)
-        .limit(limit)
-        .lean()
-        .exec();
+      const sortQuery = req.query.sort as string || "newest";
+      const sortOptions: Record<string, any> = {
+        "newest": { creation: -1 },
+        "oldest": { creation: 1 },
+        "popular": { stars: -1 },
+        "reverse-popular": { stars: 1 },
+      };
+
+      const applications = await Application.aggregate([
+        { $match: query },
+        { 
+          $addFields: { 
+            stars: { $size: { $ifNull: ["$stargazers", []] } }
+          } 
+        },
+        { $sort: sortOptions[sortQuery] || { creation: -1 } },
+        { $skip: offset },
+        { $limit: limit }
+      ]);
 
       const publicApplications = await Promise.all(
         applications.map(async (app) => {
