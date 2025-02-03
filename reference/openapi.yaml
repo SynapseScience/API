@@ -13,10 +13,10 @@ paths:
         - name: Authorization
           in: header
           required: true
-          description: "Your client application signature of shape app_id:app_secret" 
+          description: "Your client application signature of shape Base64(app_id:app_secret)" 
           schema:
             type: string
-            example: "Basic my_app:5w6ldnHszcUnIe48LHX"
+            example: "Basic zcUnIe48L:5w6ldnHszcUnIe48LHX"
         - name: code
           in: query
           required: true
@@ -24,6 +24,13 @@ paths:
           schema:
             type: string
             example: "DMhf7qJ2SkvSzQEycBw8"
+        - name: grant_type
+          in: query
+          required: true
+          description: Always set to "authorization_code"
+          schema:
+            type: string
+            example: "authorization_code"
       responses:
         200:
           description: Success
@@ -32,9 +39,18 @@ paths:
               schema:
                 type: object
                 properties:
-                  token:
+                  access_token:
                     description: User session JSON Web Token
                     type: string
+                  token_type:
+                    description: Bearer
+                    type: string
+                  expires_in:
+                    type: integer
+                    description: Token duration (in seconds)
+                  scope:
+                    type: string
+                    description: Permissions granted (space-separated)
         400:
           description: Bad request
         401:
