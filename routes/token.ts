@@ -60,7 +60,7 @@ export const run = (app, CODES: { [key: string]: string }) => {
         message: "No client secret provided",
       });
 
-      const token = newToken(username, code, appSignature);
+      const token = newToken(username, code, decoded);
       delete CODES[code];
 
       res.json({
