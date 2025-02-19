@@ -36,7 +36,10 @@ export const run = (app: any, CODES: { [key: string]: string }) => {
       const code = rString(20);
       CODES[code] = username;
 
-      res.status(201).send({ message: "User succesfully created", code });
+      res.status(201).json({ 
+        message: "User succesfully created", 
+        code 
+      });
 
     } catch (err) {
 

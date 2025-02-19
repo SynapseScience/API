@@ -56,7 +56,7 @@ export const run = (app: any) => {
       await newApp.save();
       await user.save();
 
-      res.status(201).send({ 
+      res.status(201).json({ 
         message: "Application succesfully registered",
         client_secret: secret
       });

@@ -9,14 +9,16 @@ export default (requiredPermissions: string[] = []) => {
       const authHeader = req.headers.authorization;
 
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "Authorization token is required" });
+        return res.status(401).json({ 
+          message: "Authorization token is required" 
+        });
       }
 
       const token = authHeader.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
         username: string;
         code: string; 
-        aud: string 
+        aud: string
       };
 
       if (!decoded || !decoded.aud) {
@@ -27,7 +29,9 @@ export default (requiredPermissions: string[] = []) => {
       const application = await Application.findOne({ client_id: clientId });
       
       if(!application) {
-        return res.status(403).json({ message: "Token signed by unknown Application"})
+        return res.status(403).json({ 
+          message: "Token signed by unknown Application"
+        })
       }
       
       const hasPermissions = requiredPermissions.every(permission => {

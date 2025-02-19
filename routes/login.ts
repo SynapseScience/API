@@ -24,7 +24,7 @@ export const run = (app: any, CODES: { [key: string]: string }) => {
       const code = rString(20);
       CODES[code] = username;
       
-      res.status(200).send({ code });
+      res.status(200).json({ code });
 
     } catch(err) {
 
