@@ -7,7 +7,7 @@ servers:
   - url: https://synapse-api.replit.app/api/
 paths:
   /token:
-    get:
+    post:
       summary: Get your OAuth2 token
       parameters:
         - name: Authorization
