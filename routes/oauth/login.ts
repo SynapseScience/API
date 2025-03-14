@@ -1,12 +1,12 @@
 import express from "express";
-import { rString } from "../functions/random";
+import { rString } from "../../functions/random";
 import bcrypt from "bcrypt";
-import User from "../models/User";
-import cors from "../middleware/cors";
+import User from "../../models/User";
+import cors from "../../middleware/cors";
 
 export const run = (app: any, CODES: { [key: string]: string }) => {
   
-  app.post("/login", cors(), async (req: express.Request, res: express.Response) => {
+  app.post("/oauth/login", cors(), async (req: express.Request, res: express.Response) => {
     try {
       const { username, password } = req.body;
       const user = await User.findOne({ username });

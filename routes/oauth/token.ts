@@ -1,6 +1,5 @@
-import { newToken } from "../functions/token";
-import { rString } from "../functions/random";
-import Application from "../models/Application";
+import { newToken } from "../../functions/token";
+import Application from "../../models/Application";
 import bcrypt from "bcrypt";
 
 export const run = (app, CODES: { [key: string]: string }) => {
