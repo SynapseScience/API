@@ -1,9 +1,10 @@
+import express from "express";
 import { newToken } from "../../functions/token";
 import Application from "../../models/Application";
 import bcrypt from "bcrypt";
 
-export const run = (app, CODES: { [key: string]: string }) => {
-  app.post("/api/token", async (req, res) => {
+export const run = (app: any, CODES: { [key: string]: string }) => {
+  app.post("/oauth/token", async (req: express.Request, res: express.Response) => {
     try {
       
       let grant_type = req.query.grant_type;
@@ -14,7 +15,7 @@ export const run = (app, CODES: { [key: string]: string }) => {
         })
       }
 
-      let code = req.query.code;
+      let code = req.query.code as string;
       
       if (!code || !CODES[code]) {
         return res.status(401).json({

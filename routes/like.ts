@@ -5,7 +5,7 @@ import authenticate from "../middleware/authenticate";
 
 export const run = (app): void => {
 
-  app.put("/api/like", authenticate(["social"]), 
+  app.put("/like", authenticate(["social"]), 
     async (req: express.Request, res: express.Response) => {
     try {
       

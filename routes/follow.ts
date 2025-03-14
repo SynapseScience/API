@@ -4,7 +4,7 @@ import authenticate from "../middleware/authenticate";
 
 export const run = (app): void => {
 
-  app.put("/api/follow", authenticate(["social"]), 
+  app.put("/follow", authenticate(["social"]), 
     async (req: express.Request, res: express.Response) => {
     try {
       let userA = await User.findOne({ username: req.username });

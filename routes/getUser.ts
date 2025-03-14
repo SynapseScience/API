@@ -3,7 +3,7 @@ import express from "express";
 
 export const run = (app: any): void => {
   
-  app.get("/api/user", async (req: express.Request, res: express.Response) => {
+  app.get("/user", async (req: express.Request, res: express.Response) => {
     try {
       const username = req.query.username as string;
 

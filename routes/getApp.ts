@@ -3,7 +3,7 @@ import express from "express";
 
 export const run = (app: any): void => {
 
-  app.get("/api/application", async (req: express.Request, res: express.Response) => {
+  app.get("/application", async (req: express.Request, res: express.Response) => {
     try {
       const client_id = req.query.client_id as string;
 

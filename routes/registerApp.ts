@@ -7,7 +7,7 @@ import User from "../models/User";
 
 export const run = (app: any) => {
 
-  app.post("/api/application", authenticate(["manage_apps"]), 
+  app.post("/application", authenticate(["manage_apps"]), 
     async (req: express.Request, res: express.Response) => {
     try {
 

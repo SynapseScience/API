@@ -4,7 +4,7 @@ import authenticate from "../middleware/authenticate";
 
 export const run = (app): void => {
 
-  app.get("/api/me", authenticate(), async (req: express.Request, res: express.Response) => {
+  app.get("/me", authenticate(), async (req: express.Request, res: express.Response) => {
     try {
       const username = req.username;
       const user = await User.findOne({ username }).select("-password");

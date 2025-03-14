@@ -4,7 +4,7 @@ import User from "../models/User";
 import express from "express";
 
 export const run = (app: any): void => {
-  app.get("/api/drafts", authenticate(), async (req: express.Request, res: express.Response) => {
+  app.get("/drafts", authenticate(), async (req: express.Request, res: express.Response) => {
     try {
       
       const query: Record<string, any> = {};

@@ -6,7 +6,7 @@ type IApp = {
 }
 
 export const run = (app: any): void => {
-  app.get("/api/applications", 
+  app.get("/applications", 
     async (req: express.Request, res: express.Response) => {
     try {
       
