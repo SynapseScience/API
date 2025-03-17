@@ -5,18 +5,18 @@ import cors from "../../middleware/cors";
 
 export const run = (app: any, CODES: { [key: string]: string }) => {
 
-  app.put("/oauth/reset", cors(), 
+  app.post("/oauth/edit", cors(), 
     async (req: express.Request, res: express.Response) => {
       try {
-        
-        const password = req.body.email as string;
+
+        const password = req.body.password as string;
         if(!password) return res.status(400).json({
           message: "No password provided"
         })
-  
-        const username = req.body.username as string;
-        if(!username) return res.status(400).json({
-          message: "No username provided"
+        
+        const email = req.body.email as string;
+        if(!email) return res.status(400).json({
+          message: "No email provided"
         })
   
         const code = req.body.code as string;
@@ -24,10 +24,11 @@ export const run = (app: any, CODES: { [key: string]: string }) => {
           message: "No security code provided"
         })
   
-        let user = await User.findOne({ username });
+        let user = await User.findOne({ email });
   
         if(user) {
-          if(!CODES[code] || CODES[code] != username) {
+          if(!Object.keys(CODES).includes(code) || CODES[code] != user.username) {
+            console.log(CODES, code)
             return res.status(401).json({
               message: "Invalid security code"
             })
@@ -40,8 +41,8 @@ export const run = (app: any, CODES: { [key: string]: string }) => {
             message: "New password successfully set"
           })
           
-        } else return res.status(400).json({
-          message: `User not found with username : ${username}`
+        } else return res.status(401).json({
+          message: `No user was found having this email : '${email}'`
         })
 
       } catch (err) {

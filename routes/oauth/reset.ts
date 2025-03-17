@@ -10,7 +10,7 @@ export const run = (app: any, CODES: { [key: string]: string }) => {
     async (req: express.Request, res: express.Response) => {
       try {
         
-        const email = req.query.email as string;
+        const email = req.body.email as string;
         if(!email) return res.status(400).json({
           message: "No email provided"
         })
