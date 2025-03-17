@@ -6,7 +6,7 @@ info:
 servers:
   - url: https://api.connectome.fr/
 paths:
-  /token:
+  /oauth/token:
     post:
       summary: Get your OAuth2 token
       parameters:
