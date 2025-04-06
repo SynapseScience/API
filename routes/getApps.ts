@@ -46,6 +46,11 @@ export const run = (app: any): void => {
         "reverse-popular": { stars: 1 },
       };
 
+      if (req.query.type) {
+        let type = (req.query.type as string).split(",");
+        query.type = { $in: type };
+      }
+
       const applications = await Application.aggregate([
         { $match: query },
         { 

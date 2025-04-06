@@ -334,10 +334,17 @@ paths:
         - name: tags
           in: query
           required: false
-          description: "A comma-separated list of required tags" 
+          description: "A comma-separated list of required tags (AND)" 
           schema:
             type: string
             example: "partenaire,francophone"
+        - name: type
+          in: query
+          required: false
+          description: "A comma-separated list of types (OR)"
+          schema:
+            type: string
+            example: "outil,jeu"
       responses:
         200:
           description: Success
