@@ -405,6 +405,106 @@ paths:
           description: Application not found
         500:
           description: Internal server error
+  /missions:
+    get:
+      summary: Get missions list
+      parameters:
+        - name: application
+          in: query
+          required: false
+          description: "Filter missions linked to a Synapse application"
+          schema:
+            type: string
+            example: "myapp123"
+        - name: search
+          in: query
+          required: false
+          description: "A term contained in the mission title"
+          schema:
+            type: string
+            example: "doughnuts"
+        - name: sort
+          in: query
+          required: false
+          description: "A sort algorithm to be applied on the results"
+          default: "newest"
+          schema:
+            type: string
+            enum: ["newest", "oldest", "reward", "reverse-reward"]
+            example: "reward"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  missions:
+                    description: "List of missions"
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Mission'
+                  pagination:
+                    type: object
+                    description: "Informations about pagination"
+                    properties:
+                      total:
+                        type: integer
+                        description: "The total amount of Synapse missions"
+                      limit:
+                        type: integer
+                        description: "The limit that was used for this request"
+                      offset:
+                        type: integer
+                        description: "The offset that was used for this request"
+                      currentPage:
+                        type: integer
+                        description: "The page that was returned"
+                      totalPages:
+                        type: integer
+                        description: "The total amount of pages"
+  /claim:
+    post:
+      summary: Claim a mission
+      security:
+        - oauth2:
+            - economy
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: "Your user access token from the OAuth2 authentication flow" 
+          schema:
+            type: string
+            example: "Bearer 5w6ldnHszcUnIe48LHX5w6ldnHszcUnIe48LHX"
+        - name: mission_id
+          in: query
+          required: true
+          description: "The desired Synapse mission identifyer"
+          schema:
+            type: string
+            example: "mymission42"
+
+      responses:
+        200: 
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Sucessfully updated user and mission
+                  user:
+                    $ref: '#/components/schemas/User'
+                  mission:
+                    $ref: '#/components/schemas/Mission'
+        404:
+          description: Mission not found
+        500:
+          description: Internal server error
 components:
   schemas:
     User:
@@ -544,6 +644,47 @@ components:
         permissions:
           type: array
           description: List of the application's permissions
+          items:
+            type: string
+    Mission:
+      type: object
+      description: The updated mission object
+      required:
+        - mission_id
+        - reward
+        - title
+        - description
+        - creation
+        - link
+        - application
+        - claimed
+      properties:
+        mission_id:
+          type: string
+          description: Unique identifyer of the mission
+        reward:
+          type: integer
+          description: Amount of SYN tokens gained if the mission is claimed
+        title:
+          type: string
+          description: Title of the mission
+        description:
+          type: string
+          description: Description of the mission
+        creation:
+          type: string
+          format: date-time
+          description: The date when the mission was registered
+        link:
+          type: string
+          format: uri
+          description: Link to the place where the mission can be claimed
+        application:
+          type: string
+          description: Unique client_id of the application linked to this mission
+        claimed:
+          type: array
+          description: List of usernames that claimed this mission
           items:
             type: string
   securitySchemes:
