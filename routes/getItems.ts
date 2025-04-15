@@ -32,8 +32,8 @@ export const run = (app: any): void => {
       const sortOptions: Record<string, any> = {
         "newest": { creation: -1 },
         "oldest": { creation: 1 },
-        "cost": { cost: -1 },
-        "reverse-cost": { cost: 1 },
+        "value": { value: -1 },
+        "reverse-value": { value: 1 },
       };
 
       const items = await Item.aggregate([

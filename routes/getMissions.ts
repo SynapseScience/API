@@ -32,8 +32,8 @@ export const run = (app: any): void => {
       const sortOptions: Record<string, any> = {
         "newest": { creation: -1 },
         "oldest": { creation: 1 },
-        "reward": { reward: -1 },
-        "reverse-reward": { reward: 1 },
+        "value": { value: -1 },
+        "reverse-value": { value: 1 },
       };
 
       const missions = await Mission.aggregate([

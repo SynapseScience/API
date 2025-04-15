@@ -6,7 +6,7 @@ function isValidUrl(v: string) {
 
 const missionSchema = new Schema({
   mission_id: String,
-  reward: { type: Number, required: true },
+  value: { type: Number, required: true },
   title: { type: String, required: true },
   creation: { type: Date, default: Date.now },
   description: { type: String, required: true },
@@ -24,7 +24,7 @@ const missionSchema = new Schema({
 
 interface IMission extends Document {
   mission_id: string;
-  reward: number;
+  value: number;
   title: string;
   creation: Date;
   description: string;

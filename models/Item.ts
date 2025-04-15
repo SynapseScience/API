@@ -9,7 +9,7 @@ const itemSchema = new Schema({
   title: { type: String, required: true },
   creation: { type: Date, default: Date.now },
   description: { type: String, required: true },
-  cost: { type: Number, required: true },
+  value: { type: Number, required: true },
   badge: { type: String, required: false },
   link: {
     type: String,
@@ -28,7 +28,7 @@ interface IItem extends Document {
   title: string;
   creation: Date;
   description: string;
-  cost: number;
+  value: number;
   badge?: string;
   link?: string;
   application: string;

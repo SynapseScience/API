@@ -441,8 +441,8 @@ paths:
           default: "newest"
           schema:
             type: string
-            enum: ["newest", "oldest", "reward", "reverse-reward"]
-            example: "reward"
+            enum: ["newest", "oldest", "value", "reverse-value"]
+            example: "newest"
       responses:
         200:
           description: Success
@@ -709,7 +709,7 @@ components:
       description: The updated mission object
       required:
         - mission_id
-        - reward
+        - value
         - title
         - description
         - creation
@@ -720,7 +720,7 @@ components:
         mission_id:
           type: string
           description: Unique identifyer of the mission
-        reward:
+        value:
           type: integer
           description: Amount of SYN tokens gained if the mission is claimed
         title:
@@ -750,7 +750,7 @@ components:
       description: The updated item object
       required:
         - item_id
-        - cost
+        - value
         - title
         - description
         - creation
@@ -761,7 +761,7 @@ components:
         item_id:
           type: string
           description: Unique identifyer of the item
-        cost:
+        value:
           type: integer
           description: Amount of SYN tokens spent to acquire the item
         title:
