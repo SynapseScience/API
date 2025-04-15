@@ -1,12 +1,12 @@
 import User from "../models/User";
 import Application from "../models/Application";
-import Mission from "../models/Mission";
 import express from "express";
 import authenticate from "../middleware/authenticate";
+import Item from "../models/Item";
 
 export const run = (app): void => {
 
-  app.post("/claim", authenticate(["economy"]), 
+  app.post("/give", authenticate(["economy"]), 
     async (req: express.Request, res: express.Response) => {
     try {
 
@@ -16,36 +16,40 @@ export const run = (app): void => {
       });
 
       user = await user.publicFields();
-      application = await application.publicFields();
 
       if(!user || !application) return res.status(400).json({
         message: "Cannot find authenticated User or Application"
       });
 
-      if(!req.query.mission_id) return res.status(400).json({
-        message: `Mission id query parameter is required`
+      if(!req.query.item_id) return res.status(400).json({
+        message: `Item id query parameter is required`
       });
 
-      const mission = await Mission.findOne({ mission_id: req.query.mission_id });
+      const item = await Item.findOne({ item_id: req.query.item_id });
 
-      if(!mission) return res.status(404).json({
-        message: `Mission not found with id : '${req.query.mission_id}'`
+      if(!item) return res.status(404).json({
+        message: `Item not found with id : '${req.query.item_id}'`
       });
 
-      if(mission.claimed.includes(user.username)) return res.status(400).json({
-        message: "Mission already claimed by User"
+      if(user.account < item.cost) return res.status(402).json({
+        message: "Insufficient User balance"
       })
       
-      user.account += mission.reward;
-      mission.claimed.push(user.username);
+      user.account -= item.cost;
+      
+      if(item.badge) {
+        user.badges.push(item.badge);
+      }
+
+      item.claimed.push(user.username);
 
       await user.save();
-      await mission.save();
+      await item.save();
 
       res.status(200).json({ 
-        message: "Mission and User successfully updated", 
+        message: "Item and User successfully updated", 
         user,
-        mission
+        item
       })
 
     } catch (err) {

@@ -1,10 +1,13 @@
 openapi: 3.0.0
 info:
   title: Synapse
-  version: 2.2.3
+  version: 2.2.5
   description: Synapse is a REST API designed to simplify and promote innovation in the realm of independent science. It leverages the standard authentication flow, making it easy to use without requiring advanced technical skills. It is designed for scientists, researchers, and especially enthusiasts who wish to launch projects without being constrained by closed platforms or limited ecosystems. We promote a participatory approach where projects are open, free, transparent, and accessible. Finally, Synapse aims to provide significant visibility to independent projects, helping them connect with the right audience or contributors.
 servers:
   - url: https://api.connectome.fr/
+tags:
+  - name: Authenticated
+    description: These endpoints are accessible via authenticated requests, and may be restricted by scope flags. Typically, it will need a `Authorization` header containing your access token. For authentication reference, see the `POST /token` endpoint reference and the OAuth2 section of the Synapse API.
 paths:
   /oauth/token:
     post:
@@ -58,6 +61,7 @@ paths:
   /user:
     get:
       summary: Get user from username
+      tags: []
       parameters:
         - name: username
           in: query
@@ -82,6 +86,7 @@ paths:
   /me:
     get:
       summary: Get authenticated user
+      tags: [Authenticated]
       security:
         - oauth2:
       parameters:
@@ -105,6 +110,7 @@ paths:
           description: Internal server error
     put:
       summary: Edit authenticated user
+      tags: [Authenticated]
       security:
         - oauth2:
             - edition
@@ -211,6 +217,7 @@ paths:
   /follow:
     put:
       summary: Follow / Unfollow user
+      tags: [Authenticated]
       security:
         - oauth2:
             - social
@@ -251,6 +258,7 @@ paths:
   /like:
     put:
       summary: Like / Unlike application
+      tags: [Authenticated]
       security:
         - oauth2:
             - social
@@ -291,6 +299,7 @@ paths:
   /applications:
     get:
       summary: Get applications list
+      tags: []
       parameters:
         - name: limit
           in: query
@@ -384,6 +393,7 @@ paths:
   /application:
     get:
       summary: Get application from id
+      tags: []
       parameters:
         - name: client_id
           in: query
@@ -408,6 +418,7 @@ paths:
   /missions:
     get:
       summary: Get missions list
+      tags: []
       parameters:
         - name: application
           in: query
@@ -464,9 +475,14 @@ paths:
                       totalPages:
                         type: integer
                         description: "The total amount of pages"
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
   /claim:
     post:
       summary: Claim a mission
+      tags: [Authenticated]
       security:
         - oauth2:
             - economy
@@ -503,6 +519,48 @@ paths:
                     $ref: '#/components/schemas/Mission'
         404:
           description: Mission not found
+        500:
+          description: Internal server error
+  /give:
+    post:
+      summary: Give an item
+      tags: [Authenticated]
+      security:
+        - oauth2:
+            - economy
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: "Your user access token from the OAuth2 authentication flow" 
+          schema:
+            type: string
+            example: "Bearer 5w6ldnHszcUnIe48LHX5w6ldnHszcUnIe48LHX"
+        - name: item_id
+          in: query
+          required: true
+          description: "The desired Synapse item identifyer"
+          schema:
+            type: string
+            example: "mybeautifulitemomg"
+
+      responses:
+        200: 
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Sucessfully updated user and item
+                  user:
+                    $ref: '#/components/schemas/User'
+                  item:
+                    $ref: '#/components/schemas/Item'
+        404:
+          description: Item not found
         500:
           description: Internal server error
 components:
@@ -685,6 +743,47 @@ components:
         claimed:
           type: array
           description: List of usernames that claimed this mission
+          items:
+            type: string
+    Item:
+      type: object
+      description: The updated item object
+      required:
+        - item_id
+        - cost
+        - title
+        - description
+        - creation
+        - link
+        - application
+        - claimed
+      properties:
+        item_id:
+          type: string
+          description: Unique identifyer of the item
+        cost:
+          type: integer
+          description: Amount of SYN tokens spent to acquire the item
+        title:
+          type: string
+          description: Title of the item
+        description:
+          type: string
+          description: Description of the item
+        creation:
+          type: string
+          format: date-time
+          description: The date when the item was registered
+        link:
+          type: string
+          format: uri
+          description: Link to the place where the item can be obtained
+        application:
+          type: string
+          description: Unique client_id of the application that emitted this item
+        claimed:
+          type: array
+          description: List of usernames that bought this item (one user may appear twice)
           items:
             type: string
   securitySchemes:
