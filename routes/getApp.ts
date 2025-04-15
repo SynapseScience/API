@@ -9,7 +9,7 @@ export const run = (app: any): void => {
 
       if (!client_id) {
         return res.status(400).json({ 
-          message: "Username query parameter is required" 
+          message: "Client id query parameter is required" 
         });
       }
 
