@@ -31,11 +31,11 @@ export const run = (app): void => {
         message: `Item not found with id : '${req.query.item_id}'`
       });
 
-      if(user.account < item.value) return res.status(402).json({
+      if(user.balance < item.value) return res.status(402).json({
         message: "Insufficient User balance"
       })
       
-      user.account -= item.value;
+      user.balance -= item.value;
       
       if(item.badge) {
         user.badges.push(item.badge);

@@ -41,7 +41,7 @@ const userSchema = new Schema({
       "Avatar must be empty or a valid URL pointing to a .png or .jpeg image"
     ]
   },
-  account: { type: Number, default: 0 },
+  balance: { type: Number, default: 0 },
   following: [{ type: String }],
   followers: [{ type: String }],
   badges: [{ type: String }],
@@ -80,7 +80,7 @@ const userSchema = new Schema({
 });
 
 userSchema.methods.publicFields = function() {
-  return this.model('User').findOne({ _id: this._id }).select('-password -account -email');
+  return this.model('User').findOne({ _id: this._id }).select('-password -balance -email');
 };
 
 interface IUser extends Document {
@@ -90,7 +90,7 @@ interface IUser extends Document {
   avatar: string;
   description: string;
   pronouns: "il" | "elle" | "iel";
-  account: number;
+  balance: number;
   following: string[];
   followers: string[];
   badges: string[];

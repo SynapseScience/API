@@ -35,7 +35,7 @@ export const run = (app): void => {
         message: "Mission already claimed by User"
       })
       
-      user.account += mission.value;
+      user.balance += mission.value;
       mission.claimed.push(user.username);
 
       await user.save();
