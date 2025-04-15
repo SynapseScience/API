@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Synapse
-  version: 2.2.5
+  version: 2.2.6
   description: Synapse is a REST API designed to simplify and promote innovation in the realm of independent science. It leverages the standard authentication flow, making it easy to use without requiring advanced technical skills. It is designed for scientists, researchers, and especially enthusiasts who wish to launch projects without being constrained by closed platforms or limited ecosystems. We promote a participatory approach where projects are open, free, transparent, and accessible. Finally, Synapse aims to provide significant visibility to independent projects, helping them connect with the right audience or contributors.
 servers:
   - url: https://api.connectome.fr/
@@ -463,6 +463,70 @@ paths:
                       total:
                         type: integer
                         description: "The total amount of Synapse missions"
+                      limit:
+                        type: integer
+                        description: "The limit that was used for this request"
+                      offset:
+                        type: integer
+                        description: "The offset that was used for this request"
+                      currentPage:
+                        type: integer
+                        description: "The page that was returned"
+                      totalPages:
+                        type: integer
+                        description: "The total amount of pages"
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+  /items:
+    get:
+      summary: Get items list
+      tags: []
+      parameters:
+        - name: application
+          in: query
+          required: false
+          description: "Filter items linked to a Synapse application"
+          schema:
+            type: string
+            example: "myapp123"
+        - name: search
+          in: query
+          required: false
+          description: "A term contained in the item title"
+          schema:
+            type: string
+            example: "doughnuts"
+        - name: sort
+          in: query
+          required: false
+          description: "A sort algorithm to be applied on the results"
+          default: "newest"
+          schema:
+            type: string
+            enum: ["newest", "oldest", "value", "reverse-value"]
+            example: "newest"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    description: "List of items"
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Item'
+                  pagination:
+                    type: object
+                    description: "Informations about pagination"
+                    properties:
+                      total:
+                        type: integer
+                        description: "The total amount of Synapse items"
                       limit:
                         type: integer
                         description: "The limit that was used for this request"
